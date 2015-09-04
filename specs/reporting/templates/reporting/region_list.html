@@ -1,0 +1,22 @@
+{% extends "reporting/base.html" %}
+
+{% block title %}Regional Market Summary{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        {% for region in object_list %}
+            {% if forloop.counter0|divisibleby:2 %}
+                <div class="col-md-6">
+                    {{ region }}
+                    {% include "reporting/includes/region_table.html" %}
+                </div>
+            {% else %}
+                <div class="col-md-6">
+                       {{ region }}
+                    {% include "reporting/includes/region_table.html" %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock content %}
+

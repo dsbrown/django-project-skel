@@ -1,0 +1,10 @@
+{% extends "reporting/base.html" %}
+
+{% block title %}Site Listing{% endblock title %}
+
+{% block content %}
+    {% for site in object_list %}
+        <p><a href="{% url 'site_by_code' site.code %}">{{ site }}</a></p>
+    {% endfor %}
+{% endblock content %}
+

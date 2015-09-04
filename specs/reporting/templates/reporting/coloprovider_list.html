@@ -1,0 +1,13 @@
+{% extends "reporting/base.html" %}
+{% load reporting_tags %}
+{% block title %}Vendors Summary{% endblock title %}
+
+{% block content %}
+    <table class="table table-striped">
+        {{ ""|specs_th }}
+        {% for vendor in object_list %}
+            {{ vendor|specs_coloprovider_tr }}
+        {% endfor %}
+    </table>
+{% endblock content %}
+

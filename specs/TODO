@@ -1,0 +1,7 @@
+TODO
+
+load new model and make migrations, migrate
+test weights imported
+add working module
+add modified reporting/admin.py - No not working
+

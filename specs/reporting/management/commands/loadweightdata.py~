@@ -1,0 +1,75 @@
+#
+## Original loadsitedata.py from Chris
+#
+from django.core.management.base import BaseCommand, CommandError
+from reporting.models import ContractWeights, EngineeringWeights, PriceWeights, ScaleWeights, SecurityWeights, SpecsWeights
+from os.path import isfile, join, splitext
+from openpyxl import load_workbook
+from django.apps import apps 
+VALID_TABLES = (ContractWeights, EngineeringWeights, PriceWeights, ScaleWeights, SecurityWeights, SpecsWeights,)
+SUPPORTED_FORMATS = ('.xlsx', '.xlsm', '.xltx', '.xltm')
+
+class Command(BaseCommand):
+    help = 'Loads the score weight tables'
+
+    def add_arguments(self, parser):
+        parser.add_argument("--path", nargs="?", dest="path", required=True, 
+                    help="Path to excel file")
+
+        parser.add_argument("--table", nargs="?", dest="table", required=True, 
+                    help="Name of table to write to")
+
+    # Validates excel file can be processed 
+    def valid_excel_file(self, xfile):
+        if isfile(xfile) and not xfile.startswith('~'):
+            (root,ext) = splitext(xfile)
+            if ext in SUPPORTED_FORMATS:
+                return xfile
+            else:
+                return ""
+
+    def handle(self, *args, **options):
+        path = options['path']
+        table = options['table']
+        #check if file is valid before continuing
+        if valid_excel_file(path):
+            self.stdout.write('Processing file - %s' % path) 
+            if table in VALID_TABLES:
+                self.parse(path,table)
+            else:
+                raise CommandError('Table "%s" is not a valid table' % table)
+        else:
+            raise CommandError('Path "%s" is not a valid excel file' % path)
+
+    def get_rows(self,ws):
+        headers=[0]
+        first_row = True
+        rows = []
+        for row in ws.rows:
+            c = 0
+            t = {}
+            for cell in row:
+                if first_row:
+                    headers[0]+=1
+                    headers.append(cell.value)
+                else:
+                     c += 1
+                     t[headers[c]] = cell.value
+            if first_row:
+                first_row = False
+                continue
+            rows.append(t)
+        return rows
+
+    def parse(self, path, table):
+        self.stdout.write('Parsing weight file %s'%table)
+        table_obj = apps.getmodel(app_label=‘reporting’, model_name=table)
+        wb = load_workbook(filename=path, data_only=True) # data_only=True returns the value of a formula, not a formula itself
+        self.stdout.write( wb)
+        sheet = wb.worksheets[0]
+        self.stdout.write( sheet )
+        row = self.get_rows(sheet)
+        if row[0]:
+            if table_obj.objects.count() >0: table_obj.objects.all().delete() # uniquie to weights only!
+            t, created = table_obj.objects.get_or_create(**row[0])
+            t.save()

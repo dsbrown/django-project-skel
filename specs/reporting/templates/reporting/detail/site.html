@@ -1,0 +1,34 @@
+{% extends "reporting/base.html" %}
+
+{% block title %}{{ site }} Site Detail{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <p>Number of records: {{ site.get_specs_count }}</p>
+            <p>Date of last record: xx/xx/xxxx</p>
+        </div>
+        <div class="col-md-4">
+               <select>
+                    <option value="">Year</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+               </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {% include "reporting/includes/site_security_panel.html" %}
+            {% include "reporting/includes/site_engineering_panel.html" %}
+        </div>
+        <div class="col-md-4">
+            {% include "reporting/includes/site_price_panel.html" %}
+            {% include "reporting/includes/site_contract_panel.html" %}
+
+        </div>
+        <div class="col-md-4">
+            {% include "reporting/includes/site_scale_panel.html" %}
+        </div>
+    </div>
+{% endblock content %}
+

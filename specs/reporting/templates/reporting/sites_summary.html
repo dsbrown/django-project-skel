@@ -1,0 +1,16 @@
+{% extends "reporting/base.html" %}
+{% load reporting_tags %}
+
+{% block title %}Site Summary{% endblock title %}
+
+{% block content %}
+    <table class="table table-striped">
+        {{ ""|specs_th }}
+        {% for site in sites %}
+            {% if site.has_specs %}
+                {{ site|specs_site_tr }}
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock content %}
+

@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SPECS – The GIBD Colocation Database & Web Based Reporting Tool</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+
+		<!-- Bootstrap core CSS -->
+                <link href="{% static 'reporting/bootstrap.min.css' %}" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="{% static 'reporting/dashboard.css' %}" rel="stylesheet">
+
+	</head>
+    <body>
+        <!!--- bootstrap --> 
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    <ul id="site-nav" class="nav nav-sidebar">
+                        <li><a href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+                        <li><a href="{% url 'topology_summary' %}">Global Summary</a></li>
+                        <li><a href="{% url 'regional_summary' %}">Region Summary</a></li>
+                        <li><a href="{% url 'vendors_summary' %}">Vendor Summary</a></li>
+                        <li><a href="{% url 'sites_summary' %}">Site Summary</a></li>
+                        <li><a href="{% url 'sites_list' %}">Site Detail</a></li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <h1 class="page-header">{% block title %}{% endblock title %}</h1>
+                    <div class="row">
+                        {% block content %}{% endblock content %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- boot strapp -->
+    </body>
+    <script src="{% static 'reporting/jquery.min.js' %}"></script>
+    <script src="{% static 'reporting/bootstrap.min.js' %}"></script>
+    <script src="{% static 'reporting/specs.js' %}"></script>
+</html>
